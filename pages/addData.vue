@@ -16,15 +16,8 @@
                 <div class="row">
                   <div class="form-group col-md-6">
                     <v-text-field
-                      v-model="name"
+                      v-model="product"
                       label="productName"
-                      required
-                    />
-                  </div>
-                  <div class="form-group col-md-6">
-                    <v-text-field
-                      v-model="original"
-                      label="original"
                       required
                     />
                   </div>
@@ -32,13 +25,6 @@
                     <v-text-field
                       v-model="buymore"
                       label="buymore"
-                      required
-                    />
-                  </div>
-                  <div class="form-group col-md-6">
-                    <v-text-field
-                      v-model="sell"
-                      label="sell"
                       required
                     />
                   </div>
@@ -51,8 +37,8 @@
                   </div>
                   <div class="form-group col-md">
                     <v-text-field
-                      v-model="addproduct"
-                      label="addproduct"
+                      v-model="date"
+                      label="date"
                       required
                     />
                   </div>
@@ -100,39 +86,42 @@
   </v-layout>
 </template>
 <script>
+import { db } from '~/plugins/firebaseConfig.js'
 export default {
   data: () => ({
     valid: true,
-    name: '',
+    product: '',
     loader: null,
     load: false,
-    original: '',
     left: '',
     buymore: '',
     sub: false,
     array: null,
-    sell: null,
-    addproduct: ''
+    date: ''
 
   }),
   watch: {
     loader () {
       this.valid = true
-      this.name = ''
+      this.product = ''
       this.load = false
-      this.original = ''
       this.left = ''
       this.buymore = ''
-      this.sell = ''
-      this.addproduct = ''
+      this.date = ''
     }
   },
 
   methods: {
     confirm () {
-      this.arrayData = { dataId: this.$store.state.Dataid, name: this.name, original: this.original, buymore: this.buymore, sell: this.sell, left: this.left, addproduct: this.addproduct }
-      this.$store.commit('increment')
-      this.$store.commit('regis', this.arrayData)
+      this.arrayData = { dataId: this.$store.state.Dataid, product: this.product, buymore: this.buymore, left: this.left, date: this.date }
+      // Add a new document in collection "cities"
+      db.collection('missing').add(this.arrayData)
+        .then(function () {
+          console.log('Document successfully written!')
+        })
+        .catch(function (error) {
+          console.error('Error writing document: ', error)
+        })
     }
   }
 }

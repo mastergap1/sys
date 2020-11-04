@@ -5,8 +5,8 @@
       <v-data-table
         dense
         :headers="headers"
-        :items="this.$store.state.data"
-        item-key="dataId"
+        :items="missing"
+        item-key="date"
         class="elevation-1"
       />
     </v-container>
@@ -15,41 +15,81 @@
       <h2>ตารางแจ้งยอดเงิน</h2>
       <v-data-table
         dense
-        :headers="headers"
-        :items="this.$store.state.data"
-        item-key="dataId"
+        :headers="headers01"
+        :items="dataMoney"
+        item-key="date"
         class="elevation-1"
       />
     </v-container>
+    <div class="text-center">
+      <v-btn to="/">
+        logOut
+      </v-btn>
+    </div>
   </div>
 </template>
 
 <script>
+import { db } from '~/plugins/firebaseConfig.js'
 export default {
   data: () => ({
     headers: [
       {
-        text: 'ID',
+        text: 'date',
         align: 'start',
-        value: 'dataId'
+        value: 'date'
       },
       {
         text: 'product',
-        value: 'name'
+        value: 'product'
       },
       {
-        text: 'original',
-        value: 'original'
+        text: 'left',
+        value: 'left'
       },
-      { text: 'buymore', value: 'buymore' },
-      { text: 'sell', value: 'sell' },
-      { text: 'left', value: 'left' },
-      { text: 'addproduct', value: 'addproduct' }
-    ]
-  })
+      { text: 'buymore', value: 'buymore' }
+    ],
+    headers01: [
+      {
+        text: 'date',
+        align: 'start',
+        value: 'date'
+      },
+      {
+        text: 'menuName',
+        value: 'menuName'
+      },
+      {
+        text: 'price',
+        value: 'price'
+      }
+    ],
+    missing: [],
+    dataMoney: []
+  }),
+  mounted () {
+    this.menus()
+  },
+  methods: {
+    menus () {
+      db.collection('missing').orderBy('date').onSnapshot((querySnapshot) => {
+        const data = []
+        querySnapshot.forEach((doc) => {
+          data.push(doc.data())
+        })
+        this.missing = data
+      })
+      db.collection('dataMoney').orderBy('date').onSnapshot((querySnapshot) => {
+        const data01 = []
+        querySnapshot.forEach((doc) => {
+          data01.push(doc.data())
+        })
+        this.dataMoney = data01
+      })
+    }
+  }
 }
 </script>
-
 <style>
 
 </style>

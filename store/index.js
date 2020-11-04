@@ -1,6 +1,7 @@
 export const state = () => ({
   Dataid: 1,
-  data: []
+  data: [],
+  massage01: []
 })
 
 export const mutations = {
@@ -9,5 +10,8 @@ export const mutations = {
   },
   regis (state, arrayData) {
     state.data.push(arrayData)
+  },
+  addclick (state, arrayMassage) {
+    state.massage01 = arrayMassage
   }
 }

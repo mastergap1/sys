@@ -1,18 +1,19 @@
 <template>
   <div>
     <!-- <LoginForm @login-submitted="handleLoginFormSubmitted" /> -->
-    <v-text-field v-model="email">
+    <v-text-field v-model="email" name="email" type="email">
       Email
     </v-text-field>
-    <v-text-field v-model="password">
+    <v-text-field v-model="password" name="password" type="password">
       password
     </v-text-field>
-    <v-btn @click="handleLoginFormSubmitted()">ligin</v-btn>
+    <v-btn primary large block @click="handleLoginFormSubmitted()">
+      ligin
+    </v-btn>    {{ error }}
   </div>
 </template>
 
 <script>
-import firebase from 'firebase/app'
 // import LoginForm from '@/components/LoginForm'
 export default {
   // components: {
@@ -20,12 +21,19 @@ export default {
   // },
   data: () => ({
     email: '',
-    password: ''
+    password: '',
+    gapEmail: 'saranyoo00200@gmail.com',
+    gapPassword: '15975355',
+    error: ''
   }),
 
   methods: {
     handleLoginFormSubmitted () {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      if (this.email === this.gapEmail && this.password === this.gapPassword) {
+        this.$router.replace('/dataTable')
+      } else {
+        this.error = 'Error!!'
+      }
     }
   }
 }
